@@ -1,0 +1,43 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+table {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif, serif;
+  padding: 20px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+table th {
+  color: #6699cc;
+  background-color: #B9C9FD;
+  padding: 15px 10px 10px 10px;
+}
+
+table td {
+  color: #8D90AE;
+  padding: 10px;
+  background-color: #e8edff;
+  border-top: 1px dashed #fff;
+}
+
+tfoot {
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: #8D90AE;
+}
+
+a:hover, table tbody tr:hover td {
+  color: #339;
+  background: #d0dafd;
+}
+
+a:hover, tfoot tr:hover td {
+  color: #339;
+  background: #d0dafd;
+}

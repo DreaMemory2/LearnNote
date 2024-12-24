@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>修改部门</title>
+    <link rel="stylesheet" href="../css/department-design.css">
+</head>
+<body>
+<div>
+    <h1>修改部门</h1>
+    <form action="/department/modify" method="post">
+        <label><span>部门编号：</span><input type="text" name="number" value="20" readonly /></label>
+        <label><span>部门名称：</span><input type="text" name="name" value="研发部" /></label>
+        <label><span>部门位置：</span><input type="text" name="location" value="北京" /></label>
+        <label><span>&nbsp;</span> <input type="submit" class="button" value="修改" /></label>
+    </form>
+</div>
+</body>
+</html>
