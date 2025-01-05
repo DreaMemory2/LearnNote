@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>条件渲染及其他元素</title>
+  <script src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>{{msg}}</h1>
+    <!-- 
+        1. v-if指令的值: true / false
+          true: 表示该元素会被渲染到页面上
+          false: 表示该元素不会被渲染到页面上
+    -->
+    <div v-if="type">{{msg}}</div>
+    {{info}}
+    数值1: <input type="text" v-model="number01" /><br>
+    数值2: <input type="text" v-model="number02" /><br>
+    <!-- v-show指令通过修改元素CSS样式的display属性来达到显示和隐藏的 -->
+    <!-- 
+        1. v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。
+        2. 如果需要非常频繁地切换，则使用 v-show 较好
+        3. 如果在运行时条件很少改变，则使用 v-if 较好
+    -->
+    <div v-show="false">是否可见</div>
+    <!-- 在 <template> 元素上使用 v-if 条件渲染分组 -->
+    <template></template>
+  </div>
+
+  <script>
+    new Vue({
+      el : '#app',
+      data : {
+          msg : '条件渲染',
+          type : false,
+          number01 : 0,
+          number02 : 0
+      },
+      computed : {
+        info() {
+          if (this.number01 >= this.number02) {
+            this.type = true;
+          } else if (this.number01 < this.number02) {
+            this.type = false;
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

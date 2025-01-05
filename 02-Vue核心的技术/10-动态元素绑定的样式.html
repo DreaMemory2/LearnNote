@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动态元素绑定的样式</title>
+  <script src="../js/vue.js"></script>
+  <style>
+    /* Class绑定之字符串样式 */
+    .static {
+      color: white;
+      font-size: large;
+      font-weight: bold;
+      background-color: aquamarine;
+      padding: 10px;
+    }
+    .small {
+      width: 200px;
+      height: 200px;
+      text-align: center;
+      line-height: 200px;
+      background-color: orange;
+    }
+    .big {
+      width: 400px;
+      height: 400px;
+      text-align: center;
+      line-height: 400px;
+      background-color: greenyellow;
+    }
+    /* Class绑定之数值样式 */
+    .active {
+      background-color: #d6ffff;
+    }
+    .text-danger {
+      color: lightcoral;
+    }
+    /* Class绑定之对象样式 */
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>{{clazz}}</h1>
+    <div class="static"><span>{{clazz}}</span></div>
+    <!-- 动静结合 -->
+    <!-- 使用场景：如果确定动态绑定的样式个数只有一个，但是名字不确定 -->
+    <div class="static" :class="click"><span>{{clazz}}</span></div>
+    <button @click="big">变大</button>
+    <button @click="small">变小</button>
+  </div>
+
+  <div id="array">
+    <h1>{{msg}}</h1>
+    <!-- 动静结合 -->
+    <!-- 使用场景：当样式的个数不确定，并且样式的名字也不确定的时候，可以采用数组形式 -->
+    <div class="static" :class="arrays"><span>{{msg}}</span></div>
+  </div>
+
+  <div id="objects">
+    <h1>{{msg}}</h1>
+    <!-- 使用场景：当样式的个数是固定的，样式的名字也是固定的，但是需要动态决定样式用还是不用 -->
+    <div class="static" :class="clazz">{{msg}}</div>
+  </div>
+
+  <script>
+    new Vue({
+      el : '#app',
+      data : {
+          clazz : 'Class绑定之字符串形式',
+          click : ''
+      },
+      methods : {
+        big() {
+          this.click = 'big';
+        },
+        small() {
+          this.click = 'small';
+        }
+      }
+    });
+    
+    new Vue({
+      el : array,
+      data : {
+          msg : 'Class绑定之数组形式',
+          arrays : ['active', 'text-danger']
+      }
+    });
+    
+    new Vue({
+      el : objects,
+      data : {
+          msg : 'Class绑定之对象形式',
+          clazz : {
+            /* 该对象中的属性的名字和样式必须一致 */
+            active : false,
+            'text-danger' : true
+          }
+      }
+    });
+  </script>
+</body>
+</html>

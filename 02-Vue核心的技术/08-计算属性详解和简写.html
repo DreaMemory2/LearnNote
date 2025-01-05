@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>计算属性详解和简写</title>
+  <!-- 安装Vue -->
+  <script src="../js/vue.js"></script>
+  <style>
+    input {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- 容器 -->
+  <div id="app">
+    <h1>{{msg}}</h1>
+    输入的信息：<input type="text" :style="style" v-model="info">
+    <!-- 模板内的表达式非常便利，但是设计它们的初衷是用于简单运算的。在模板中放入太多的逻辑会让模板过重且难以维护 -->
+    <p>反转的信息：{{info.split('').reverse().join('')}}</p>
+    <p>method实现反转信息功能: {{reverseInfo()}}</p>
+  </div>
+
+  <!-- 
+      计算属性
+      1. 计算属性含义
+        使用Vue的原有的属性，经过一系列计算，最终得到一个全新的属性
+        Vue原有属性：data对象当中的属性
+        全新的属性：表示生成一个全新的属性，和data中的原有属性无关，新的属性也有自己的属性名和属性值
+      2. 计算属性使用
+        computed: {
+          // 这是一个计算属性
+          计算属性 : {
+            // setter 和 getter
+            get() {
+              // 当读取计算属性时，getter方法被自动调用
+            },
+            set(value) {
+              // 当修改计算属性时，getter方法被自动调用
+            }
+          }
+        }
+      3. 计算属性作用
+        代码得到复用、更加便于维护、执行效率更高
+  -->
+  <div id="div01">
+    <h1>{{msg}}</h1>
+    输入的信息：<input type="text" :style="style" v-model="info">
+    <p>计算属性实现反转信息功能：{{reverseInfo}}</p>
+    <hr>
+    <p>计算属性的简写形式</p>
+  </div>
+
+  <!-- Vue代码 -->
+  <script>
+    new Vue({
+      el : '#app',
+      data : {
+          msg : '计算属性-反转字符串案例',
+          style : 'display: block;',
+          info : ''
+      },
+      methods : {
+        /* 反转信息的方法 */
+        reverseInfo() {
+          return this.info.split('').reverse().join('');
+        }
+      }
+    });
+
+    const div =  new Vue({
+      el : '#div01',
+      data : {
+        msg : '计算属性',
+        style : 'display: block;',
+        info : ''
+      },
+      computed : {
+        // 可以定义多个计算属性
+        exmaple : {
+          /* 
+            get方法的调用时机包括两个
+              第一个时机：第一次访问这个属性的时候
+              第二个时机：该计算属性所关联的Vue原有的属性的发生变化时，getter方法会被重新调用一次
+          */
+          get() {
+            console.log('getter方法调用了');
+            console.log(this === div);
+            
+            return 'exmaple';
+          },
+          // 当修改计算属性的时候，set方法被自动调用
+          set(value) {
+            console.log('setter方法被调用了');
+            console.log(this === div);
+          }
+        },
+        reverseInfo : {
+          get() {
+            return this.info.split('').reverse().join('');
+          },
+          set(value) {
+            this.info = value;
+          }
+        },
+        // 简写形式, set不需要的时候
+        simple() {
+          return this.info;
+        }
+      }
+    })
+  </script>
+</body>
+</html>

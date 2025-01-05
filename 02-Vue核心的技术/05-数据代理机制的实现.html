@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据代理机制的实现</title>
+  <!-- 安装Vue -->
+  <script src="../js/vue.js"></script>
+  <!-- 安装手写Vue框架 -->
+  <script src="../js/myvue.js"></script>
+</head>
+<body>
+  <!-- 容器 -->
+  <div id="app">{{msg}}</div>
+  <div id="div01">
+    <h1>姓名：{{name}}</h1>
+    <h1>年龄：{{age}}</h1>
+  </div>
+  <!-- 
+    Object.defineProperty();
+    1. ES5新特性，作用：给对象新增属性，或者设置对象原有的属性
+    2. 方法中的三个参数：给哪个对象新增属性, '新增的这个属性名叫啥', {给新增的属性设置相关的配置}
+    4. 第三个参数是相关的配置项，如下
+      value 配置项：给属性指定值
+      writable 配置项：设置属性值是否可以修改，true可以修改
+      getter 配置项：不需要手动调用，当读取属性值的时候，getter方法被自动调用
+      setter 配置项：不需要手动调用，当修改属性值的时候，setter方法被自动调用
+    5. 注意：当配置项当中有setter和getter的时候,value和writable配置项都不能存在
+    6. 注意：getter方法的返回值代表这个属性它的值
+            setter方法上一个参数，这个参数可以返回接收传过来的值
+  -->
+    <script>
+      // 这是一个普通的对象
+      let obj = {};
+      // 临时变量
+      var box;
+
+      // 给上面的l对象新增一个color属性
+      Object.defineProperty(obj, 'color', {
+        /* value : "太空灰", */
+        /* writable : true, */
+        // getter 方法配置项
+        get : function() {
+          console.log('getter方法执行了');
+          return box;
+        },
+        // setter 方法配置项
+        set : function(value) {
+          console.log('setter方法执行了' + value);
+          box = value;
+        }
+      });
+    </script>
+
+    <!-- 
+      1. 数据代理机制：通过访问对象的属性来间接访问目标对象的属性
+        数据代理机制的实现依靠：Object.defineProperty()
+      2. ES6新特性
+        在对象中的函数/方法`:function`可以省略
+    -->
+    <script>
+      // 目标对象
+      var target = {
+        name : '名字'
+      };
+      // 代理对象
+      var proxy = {};
+
+      // 如果要实现数据代理机制，就需要给proxy新增一个name属性
+      /* 注意：代理对象新增的这个属性的名字和目标对象的属性名要一致 */
+      Object.defineProperty(proxy, 'name', {
+        get(){
+          // 间接访问目标对象的属性的值
+          return target.name;
+        },
+        set(value){
+          target.name = value;
+        }
+      });
+    </script>
+
+    <!-- 
+      1. Vue数据代理时对属性名的要求
+      2. Vue实例不会给以_和$开始的属性名做数据代理
+      3. 在Vue当中，给data对象的属性命名的时候，不能以_或$开始
+    -->
+    <script>
+      const vm = new Vue({
+        el : '#app',
+        data : {
+            msg : "Hello World!",
+            _age : 20,
+            $age : 20,
+        }
+      });
+    </script>
+
+    <!-- 手写Vue框架数据代理的实现 -->
+    <script>
+      const myVue = new MyVue({
+        data : {
+          msg : '信息',
+          info : '通知',
+          age : 20,
+          $age : 20,
+          _info : '通知'
+        }
+      });
+    </script>
+
+    <!-- 解读框架源代码 -->
+    <!-- 
+      Vue框架源代码中的关键性代码
+      1. var data = vm.$options.data;
+        注意：这个获取data, vm还没有_data属性
+        _data: 这个属性是Vue框架底层需要访问的
+        vm._data: {age : 7, name : 'Bluey'}
+      2. data = vm._data = isFunction(data) ? getData(data, vm) : data || {};
+        程序执行代码后，创建_data属性，如果data是一个函数，获取data函数，否则获取data属性
+      3. function isReserved(str) {
+          var c = (str + '').charCodeAt(0);
+          return c === 0x24 || c === 0x5f;
+        };
+        这个函数用来判断字符串是否以"_"和"$"开始的
+        如果为true，则表示字符串以"_"和"$"开始的
+      4.proxy(vm, "_data", key);
+        通过这行代码直接进入代理机制(数据代理)
+      5. function proxy(target, sourceKey, key) {
+          sharedPropertyDefinition.get = function proxyGetter() {
+            return this["-data"]["age"];
+          };
+          sharedPropertyDefinition.set = function proxySetter(val) {
+            this["-data"]["age"] = val;
+          };
+          Object.defineProperty(vm, 'age', sharedPropertyDefinition);
+        };
+        其中target是vm, sourceKey是"-data", key是"age";
+      6. vm._data: {age : 7, name : 'Bluey'}
+        这个属性直接指向了底层真实data对象，通过_data访问的name和age，而不是访问数据代理
+        注意：$data和_data区别：
+      7. $data是Vue框架对外公开的属性，我们可以访问这个属性
+         _data是Vue框架对内私有的属性，只能底层框架访问属性
+         $data和_data共同之处：不用执行和访问数据代理
+    -->
+    <script>
+      const bluey =  new Vue({
+        el : div01,
+        data : {
+            age : 7,
+            name : 'Bluey'
+        }
+      });
+    </script>
+
+    <!-- 关于配置项：enumerable、configurable -->
+    <script>
+      let obj01 = {
+        name : 'a'
+      };
+      // 给obj对象新增一个color属性
+      Object.defineProperty(obj01, 'color', {
+        color : '太空灰',
+        // 表示该属性可以遍历的（可枚举的，可迭代的）
+        // 表示该属性可以删除的
+        enumerable : true,
+        configurable : true
+      });
+    </script>
+</body>
+</html>
