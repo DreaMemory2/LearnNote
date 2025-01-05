@@ -1,17 +1,15 @@
 <template>
-  <main>
+  <main v-show="lists.length">
     <table>
       <thead>
         <tr>
-          <th class="select">全选 <input type="checkbox" /></th>
+          <th class="select">全选 <input type="checkbox" v-bind:checked="isSelectAll" v-on:change="selectAll($event)"/></th>
           <th class="content">Bug描述信息</th>
           <th class="operate">操作</th>
         </tr>
       </thead>
       <tbody>
-        <BugItem></BugItem>
-        <BugItem></BugItem>
-        <BugItem></BugItem>
+        <BugItem v-for="bug in lists" :key="bug.id" v-bind:id="bug.id" v-bind:content="bug.content" v-bind:resolved="bug.resolved" :modifyResolvedCallback="modifyResolvedCallback" :deleteByIdCallback="deleteByIdCallback"></BugItem>
       </tbody>
     </table>
   </main>
@@ -22,7 +20,21 @@ import BugItem from './BugItem.vue'
 
 export default {
   name: 'BugList',
-  components : {BugItem}
+  props : ['lists', "modifyResolvedCallback", "deleteByIdCallback", "isSelectAllCallback"],
+  components : {BugItem},
+  methods : {
+    selectAll(e) {
+      this.isSelectAllCallback(e.target.checked);
+    }
+  },
+  computed : {
+    resolvedCount() {
+      return this.lists.reduce((a, b) => a + (b.resolved ? 1 : 0), 0);
+    },
+    isSelectAll() {
+      return this.lists.length === this.resolvedCount && this.lists.length > 0 
+    }
+  }
 }
 </script>
 
