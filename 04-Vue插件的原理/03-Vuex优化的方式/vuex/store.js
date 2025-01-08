@@ -1,14 +1,13 @@
 import Vue from 'vue';
-
 import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
 const actions = {
-  /*
   saveUserInfo(context, value) {
-    context.commit('SAVE_USER_INFO', value);
+    context.commit('SAVE_USER_INFO', {id:Date.now(), name:value});
   },
+  /*
   saveVipInfo(context, value) {
     context.commit('SAVE_VIP_INFO', value);
   } 
@@ -19,7 +18,7 @@ const mutations = {
     state.users.unshift(value);
   },
   SAVE_VIP_INFO(state, value) {
-    state.vips.unshift(value);
+    state.vips.unshift({id:Date.now(), name:value});
   }
 };
 const state = {
