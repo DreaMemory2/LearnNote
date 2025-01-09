@@ -3,21 +3,22 @@
     <h1>B组件</h1>
     <button @click="doB1">DoB1 BUTTON</button>
     <button @click="doB2">DoB2 BUTTON</button>
-    <h3>State : {{$store.state.BModule.b}}</h3>
-    <h3>Getters : {{$store.getters['BModule/B']}}</h3>
+    <h3>State : {{b}}</h3>
+    <h3>Getters : {{B}}</h3>
   </div>
 </template>
 
 <script>
+import {mapState, mapGetters, mapActions, mapMutations} from 'vuex';
 export default {
   name : 'BComponents',
+  computed : {
+    ...mapState('BModule', ['b']),
+    ...mapGetters('BModule', ['B'])
+  },
   methods : {
-    doB1() {
-      this.$store.dispatch('BModule/doB1');
-    },
-    doB2() {
-      this.$store.commit('BModule/doB2');
-    }
+    ...mapActions('BModule', ['doB1']),
+    ...mapMutations('BModule', ['doB2'])
   }
 }
 </script>

@@ -1,9 +1,9 @@
 <template>
-  <h1>组件</h1>
+  
 </template>
 
 <script>
 export default {
-  name : 'AppComponent'
+  name : 'FruitComponent'
 }
 </script>
