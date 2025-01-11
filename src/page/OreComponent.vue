@@ -3,8 +3,6 @@
     <h1>矿石展览</h1>
     <button @click="getIronOre">铁矿石</button><br>
     <button @click="getGoldOre">金矿石</button>
-
-    <!-- 展示组件 -->
     <router-view></router-view>
   </div>
 </template>
