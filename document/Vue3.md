@@ -24,3 +24,8 @@
          }
       });
      ```
+
+## Reactive函数
+   + reactive函数，用这个函数包裹起来的对象，直接就是一个Proxy
+   + reactive函数不适合基本数据类型，专门用于对象类型
+   + `ref({...})`底层Vue框架会自动调用reactive函数
