@@ -1,6 +1,8 @@
 <template>
+  <h1>App Vue3</h1>
   <p>用户：{{name}}</p>
   <p>年龄：{{age}}</p>
+  <button @click="helloworld">Hello World</button>
 </template>
 
 <script>
@@ -14,9 +16,14 @@
       // 数据，在setup函数体当中定义的这个变能量，可以看做之前的data
       let name = 'user';
       let age = 20;
+      /* methods方法 */
+      function helloworld() {
+        console.log(name, age);
+        alert('Hello World');
+      }
       /* 如果想要模板当中使用属性值，将属性值封装一个对象，然后作为setup函数的返回值即可 */
       return {
-        name, age
+        name, age, helloworld
       }
     }
   };
