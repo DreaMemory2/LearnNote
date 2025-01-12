@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ES6新特性Proxy</title>
+</head>
+<body>
+  <script>
+    // 目标对象
+    let user = { name : 'user01' };
+    // 通过Proxy来生成代理对象
+    let proxy = new Proxy(user, {
+        // 主要是通过这些配置项类完成响应式处理的
+        /* 当你读取的时候，get执行
+          target: 目标对象
+          proName: 目标对象的属性名
+        */
+        get(target, proName) {
+        return target[proName];
+      },
+      /* 当你修改或新增某个属性的时候，set执行
+         target: 目标对象, proName: 属性名
+         value: 具体什么值
+      */
+      set(target, proName, value) {
+        target[proName] = value;
+      },
+      /* 当你删除某个属性的时候，deleteProperty */
+      deleteProperty(target, proName) {
+        return delete target[proName];
+      }
+    });
+  </script>
+</body>
+</html>

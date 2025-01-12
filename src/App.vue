@@ -1,47 +1,23 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <p>用户：{{name}}</p>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
+<script>
+  export default {
+    name : 'App',
+    /* 1. setup是一个函数，vue3中新增的配置项
+       2. 在setup函数体，当中编写 data、methods、computed、watch、生命周期的钩子
+       3. 
+    */
+    setup() {
+      // 数据，在setup函数体当中定义的这个变能量，可以看做之前的data
+      let name = 'user';
+      let age = 20;
+      /* 如果想要模板当中使用属性值，将属性值封装一个对象，然后作为setup函数的返回值即可 */
+      return {
+        name, age
+      }
+    }
+  };
+</script>
