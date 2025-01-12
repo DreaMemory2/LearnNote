@@ -1,6 +1,6 @@
 <template>
   <p>用户：{{name}}</p>
-
+  <p>年龄：{{age}}</p>
 </template>
 
 <script>
